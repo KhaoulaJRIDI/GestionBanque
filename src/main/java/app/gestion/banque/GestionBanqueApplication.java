@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @SpringBootApplication
 public class GestionBanqueApplication implements CommandLineRunner {
-    @Autowired
+
     ClientRepository clientRepository;
 
     public static void main(String[] args) {
