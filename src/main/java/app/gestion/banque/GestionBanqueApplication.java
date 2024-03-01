@@ -14,6 +14,7 @@ import java.util.UUID;
 @SpringBootApplication
 public class GestionBanqueApplication implements CommandLineRunner {
 
+   @Autowired
     ClientRepository clientRepository;
 
     public static void main(String[] args) {
@@ -33,7 +34,7 @@ public class GestionBanqueApplication implements CommandLineRunner {
             Client client = new Client();
             client.setCodeClient((UUID.randomUUID()).getLeastSignificantBits());
             client.setNomClient(faker.name().firstName());
-            client.setAdresseClient(faker.address().toString());
+            client.setAdresseClient(String.valueOf(faker.address().cityName()));
             this.clientRepository.save(client);
         }
     }

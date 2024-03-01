@@ -9,5 +9,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface ClientRepository extends JpaRepository<Client,Long> {
 
-   // public Page<Client> findByNomClientContains(String nomClient, Pageable pageable);
+   public Page<Client> findByNomClientContains(String nomClient, Pageable pageable);
 }

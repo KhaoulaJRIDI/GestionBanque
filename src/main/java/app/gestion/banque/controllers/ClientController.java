@@ -5,13 +5,13 @@ import app.gestion.banque.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class ClientController {
     @Autowired
     ClientRepository clientRepository;
@@ -19,10 +19,10 @@ public class ClientController {
 
     @ResponseBody
     public String home() { return "Hello Spring Boot"; }
-    @GetMapping(value = "/clients")
-    public String index(Model model)
+    @GetMapping(value = "/index")
+    public String index()
     {
-        return "pages/index";
+        return "test";
     }
     @GetMapping(value="/search")
     public String search(Model model,
@@ -32,8 +32,8 @@ public class ClientController {
 
 
         Page<Client> pageClients =
-                //clientRepository.findByNomClientContains(mc, PageRequest.of(page,2));
-        clientRepository.findAll(PageRequest.ofSize(10));
+                clientRepository.findByNomClientContains(mc, PageRequest.of(page,5));
+        //clientRepository.findAll(PageRequest.ofSize(10));
         for (Client c:pageClients){
             System.out.println("nom client: "+c.getNomClient());
         }
@@ -55,6 +55,30 @@ public class ClientController {
         clientRepository.deleteById(id);
         return "redirect:/search?page="+page+"&motCle="+motCle;
     }
+
+
+
+    @GetMapping("edit/{id}")
+    public String showClientFormToUpdate(@PathVariable("id") Long id, Model model) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Invalid client Id:" + id));
+        model.addAttribute("client", client);
+        return "pages/updateClient";
+    }
+    @PostMapping("update")
+    public String updateClient(Client client, BindingResult result, Model model) {
+        clientRepository.save(client);
+        return "redirect:search";
+    }
+
+    @GetMapping("list")
+    public String listClients(Model model)
+    {
+        model.addAttribute("clients", clientRepository.findAll());
+        return "pages/listClients";
+    }
+
+
 }
 
 
