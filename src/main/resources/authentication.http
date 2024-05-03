@@ -1,0 +1,47 @@
+###
+POST http://localhost:9090/inscription
+Content-Type: application/json
+
+{"email": "maram@gmail.com",
+  "password":"1234",
+  "name":"maram"
+
+}
+
+###
+POST http://localhost:9090/inscription
+Content-Type: application/json
+
+{
+  "email": "khaoulajri@gmail.com",
+  "password":"1234",
+  "name":"khaoula"
+}
+
+###
+POST http://localhost:9090/inscription
+Content-Type: application/json
+
+{
+  "email": "doudi@gmail.com",
+  "password":"789",
+  "name":"doudi"
+}
+###
+POST http://localhost:9090/connexion
+{
+"username":"khaoulajri@gmail.com",
+"password":"123"}
+
+###
+POST http://localhost:9090/connexion
+Content-Type: application/json
+
+{
+  "username": "efg@gmail.com",
+  "password":"efg123"
+
+
+}
+
+###

@@ -77,6 +77,13 @@ public class ClientController {
         model.addAttribute("clients", clientRepository.findAll());
         return "pages/listClients";
     }
+@PostMapping("client")
+    public Client addClient(Client client){
+        return clientRepository.save(client);
+        //return "pages/client";
+}
+
+
 
 
 }

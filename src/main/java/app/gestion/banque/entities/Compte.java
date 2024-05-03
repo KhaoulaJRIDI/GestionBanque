@@ -1,5 +1,6 @@
 package app.gestion.banque.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Compte {
+public  class Compte {
 
      @Id
     private String codeCompte;
@@ -23,7 +24,8 @@ public class Compte {
     @ManyToOne
     @JoinColumn(name = "CODECLI")
     private Client client;
-    @OneToMany
+    @OneToMany(mappedBy = "compte")
+    @JsonIgnore
     Collection <Operation> operations;
     @ManyToOne
     @JoinColumn(name="CODEEMP")

@@ -1,0 +1,24 @@
+version: '4.29'
+services:
+  db:
+    container_name: mariadb-10.4.3
+    image: mariadb:10.4.3
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD:
+    ports:
+      - 3306
+  adminer:
+    container_name: adminer-4.8.0-standalone
+    image: adminer:4.8.0-standalone
+    restart: always
+    ports:
+      - 9080:8080
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - 9081:80
+      # Change the number before : to the port the SMTP server should be accessible on
+      - 9025:25
