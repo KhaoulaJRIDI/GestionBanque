@@ -1,0 +1,12 @@
+POST http://localhost:9090/activation
+Content-Type: application/json
+
+{"code":827766}
+
+###
+POST http://localhost:9090/connexion
+Content-Type: application/json
+
+{"username": "khaoula.jridi@info.tech",
+  "password": "admin"
+}

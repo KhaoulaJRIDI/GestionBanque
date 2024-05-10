@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import app.gestion.banque.dto.AuthentificationDTO;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-@Slf4j
+
 @AllArgsConstructor
 @RestController
 public class UserController {
@@ -27,13 +29,14 @@ public class UserController {
     private JwtService jwtService;
 @Autowired
     UserRepository userRepository;
-@GetMapping  ("users")
+/*@GetMapping  ("users")
 public Collection<User> all(){
-        return userRepository.findAll();
-    }
+
+    return userRepository.findAll();
+    }*/
     @PostMapping(path = "inscription")
     public void inscription(@RequestBody User utilisateur) {
-        log.info("Inscription");
+
         utilisateurService.inscription(utilisateur);
 
     }
@@ -53,6 +56,12 @@ public Collection<User> all(){
             return this.jwtService.generate(authentificationDTO.username());
         }
         return null;
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMINISTRATEUR')")
+    @GetMapping("/users")
+    public List<User> liste(){
+    return this.utilisateurService.liste();
     }
 
 }

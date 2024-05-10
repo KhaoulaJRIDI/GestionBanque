@@ -1,43 +1,30 @@
 package app.gestion.banque.services;
 
+
 import app.gestion.banque.entities.Role;
 import app.gestion.banque.entities.TypeDeRole;
 import app.gestion.banque.entities.User;
 import app.gestion.banque.entities.Validation;
-import app.gestion.banque.exceptions.DuplicateException;
-import app.gestion.banque.exceptions.FournisseurNotFoundException;
-import app.gestion.banque.repositories.RoleRepository;
 import app.gestion.banque.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private UserRepository utilisateurRepository;
+    private BCryptPasswordEncoder passwordEncoder;
     private ValidationService validationService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
     public void inscription(User utilisateur) {
 
         if(!utilisateur.getEmail().contains("@")) {
@@ -47,39 +34,44 @@ public class UserService implements UserDetailsService {
             throw  new RuntimeException("Votre mail invalide");
         }
 
-        Optional<User> utilisateurOptional = this.userRepository.findByEmail(utilisateur.getEmail());
+        Optional<User> utilisateurOptional = this.utilisateurRepository.findByEmail(utilisateur.getEmail());
         if(utilisateurOptional.isPresent()) {
             throw  new RuntimeException("Votre mail est déjà utilisé");
         }
-        String mdpCrypte = this.bCryptPasswordEncoder.encode(utilisateur.getPassword());
+        String mdpCrypte = this.passwordEncoder.encode(utilisateur.getPassword());
         utilisateur.setPassword(mdpCrypte);
 
         Role roleUtilisateur = new Role();
         roleUtilisateur.setLibelle(TypeDeRole.UTILISATEUR);
         utilisateur.setRole(roleUtilisateur);
 
-        this.userRepository.save(utilisateur);
-        //this.validationService.enregistrer(utilisateur);
+        utilisateur = this.utilisateurRepository.save(utilisateur);
+        this.validationService.enregistrer(utilisateur);
     }
-
 
     public void activation(Map<String, String> activation) {
         Validation validation = this.validationService.lireEnFonctionDuCode(activation.get("code"));
-        if (Instant.now().isAfter(validation.getExpiration())) {
-            throw new RuntimeException("Votre code a expiré");
+        if(Instant.now().isAfter(validation.getExpiration())){
+            throw  new RuntimeException("Votre code a expiré");
         }
-        User utilisateurActiver = this.userRepository.findById(validation.getUtilisateur().getId()).orElseThrow(() -> new RuntimeException("Utilisateur inconnu"));
+        User utilisateurActiver = this.utilisateurRepository.findById(validation.getUtilisateur().getId()).orElseThrow(() -> new RuntimeException("Utilisateur inconnu"));
         utilisateurActiver.setActive(true);
-        this.userRepository.save(utilisateurActiver);
+        this.utilisateurRepository.save(utilisateurActiver);
     }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository
+        return this.utilisateurRepository
                 .findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne corespond à cet email"));
-
+                .orElseThrow(() -> new  UsernameNotFoundException("Aucun utilisateur ne corespond à cet email"));
     }
 
-
+    public List<User> liste() {
+        final Iterable<User> utilisateurIterable = this.utilisateurRepository.findAll();
+        List<User>  utilisateurs = new ArrayList();
+        for (User utilisateur : utilisateurIterable) {
+            utilisateurs.add(utilisateur);
+        }
+        return utilisateurs;
+    }
 }

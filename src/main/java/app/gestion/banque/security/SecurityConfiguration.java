@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtFilter jwtFilter;
@@ -41,13 +43,15 @@ public class SecurityConfiguration {
                                                 .requestMatchers(POST,"/inscription").permitAll()
                                                 .requestMatchers(POST,"/activation").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
-                                                .requestMatchers(GET,"/users").hasRole("UTILSATEUR")
+                                                .requestMatchers(GET,"/users").hasRole("ADMINISTRATEUR")
+                                                .requestMatchers(GET,"/fournisseurs").hasRole("MANAGER")
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                         )
+
                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();
     }
@@ -64,5 +68,6 @@ public class SecurityConfiguration {
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
     }
+
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -19,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,26 +65,31 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
+
         return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
+
         return this.active;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+
         return this.active;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+
         return this.active;
     }
 
     @Override
     public boolean isEnabled() {
+
         return this.active;
     }
 }

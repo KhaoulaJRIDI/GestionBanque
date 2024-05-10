@@ -13,7 +13,7 @@ public class NotificationService {
     JavaMailSender javaMailSender;
     public void envoyer(Validation validation) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("khaoulajri@gmail.com");
+        message.setFrom("no-reply@info.tech");
         message.setTo(validation.getUtilisateur().getEmail());
         message.setSubject("Votre code d'activation");
 

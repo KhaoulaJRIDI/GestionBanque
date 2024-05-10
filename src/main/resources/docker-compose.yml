@@ -1,13 +1,6 @@
 version: '4.29'
 services:
-  db:
-    container_name: mariadb-10.4.3
-    image: mariadb:10.4.3
-    restart: always
-    environment:
-      MARIADB_ROOT_PASSWORD:
-    ports:
-      - 3306
+
   adminer:
     container_name: adminer-4.8.0-standalone
     image: adminer:4.8.0-standalone

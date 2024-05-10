@@ -1,0 +1,29 @@
+POST http://localhost:9090/inscription
+Content-Type: application/json
+
+{"email": "test@info.tech",
+  "name": "test",
+  "lastName": "TEST",
+  "password": "123"
+  }
+
+###
+POST http://localhost:9090/activation
+Content-Type: application/json
+
+{"code": 946089}
+
+###
+POST http://localhost:9090/connexion
+Content-Type: application/json
+
+{
+  "username":"manager@info.tech",
+"password": "manager"
+}
+
+###
+GET http://localhost:9090/users
+Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTUzMzg4OTEsInN1YiI6ImtoYW91bGEuanJpZGlAaW5mby50ZWNoIiwibm9tIjoiYWRtaW4ifQ.tclwWpdqnoYguJF8fPlgopbf6XiWTIYv0ua19OuJX0E
+###

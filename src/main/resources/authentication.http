@@ -4,10 +4,18 @@ Content-Type: application/json
 
 {"email": "maram@gmail.com",
   "password":"1234",
-  "name":"maram"
+  "name":"maram",
+  "lastName": "maram"
 
 }
 
+###
+POST http://localhost:9090/activation
+Content-Type: application/json
+
+{"code":564165
+
+}
 ###
 POST http://localhost:9090/inscription
 Content-Type: application/json
@@ -23,25 +31,37 @@ POST http://localhost:9090/inscription
 Content-Type: application/json
 
 {
-  "email": "doudi@gmail.com",
+  "email": "doudi123@gmail.com",
   "password":"789",
   "name":"doudi"
 }
 ###
 POST http://localhost:9090/connexion
 {
-"username":"khaoulajri@gmail.com",
-"password":"123"}
+"username": "test@info.tech",
+"password": "123"
+}
+
+###
+GET http://localhost:9090/users
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJURVNUIiwic3ViIjoidGVzdEBpbmZvLnRlY2giLCJleHAiOjE3MTUyOTA3MzR9.kLLEuHmotkWUqSjzls75VqltS6KdcHULs-8ZJC7AuWE
+
+
+###
+POST http://localhost:9090/inscription
+Content-Type: application/json
+
+{"username": "api15@info.tech",
+  "password": "api123"
+
+}
 
 ###
 POST http://localhost:9090/connexion
 Content-Type: application/json
 
-{
-  "username": "efg@gmail.com",
-  "password":"efg123"
-
-
-}
+{"username": "maram@gmail.com",
+"password": "1234"}
 
 ###
